@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// Merge function to combine two halves
+void merge(vector<int> &arr, int low, int mid, int high) {
+    vector<int> temp;
+
+    int i = low;    // Starting index for left subarray
+    int j = mid + 1; // Starting index for right subarray
+
+    // Traverse both subarrays and push non-zero elements first
+    while (i <= mid && j <= high) {
+        if (arr[i] != 0) {
+            temp.push_back(arr[i]);
+        }
+        i++;
+        if (arr[j] != 0) {
+            temp.push_back(arr[j]);
+        }
+        j++;
+    }
+
+    // Store remaining elements of left subarray (if any)
+    while (i <= mid) {
+        if (arr[i] != 0) {
+            temp.push_back(arr[i]);
+        }
+        i++;
+    }
+
+    // Store remaining elements of right subarray (if any)
+    while (j <= high) {
+        if (arr[j] != 0) {
+            temp.push_back(arr[j]);
+        }
+        j++;
+    }
+
+    // Add zeroes to the end
+    int zeroCount = high - low + 1 - temp.size();
+    for (int k = 0; k < zeroCount; k++) {
+        temp.push_back(0);
+    }
+
+    // Copy the merged elements back to the original array
+    for (int k = low; k <= high; k++) {
+        arr[k] = temp[k - low];
+    }
+}
+
+// Function to implement the divide and conquer approach
+void moveZeroesToEnd(vector<int> &arr, int low, int high) {
+    if (low < high) {
+        int mid = low + (high - low) / 2;
+
+        // Recursively divide the array
+        moveZeroesToEnd(arr, low, mid);
+        moveZeroesToEnd(arr, mid + 1, high);
+
+        // Merge the two halves
+        merge(arr, low, mid, high);
+    }
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of elements in the array: ";
+    cin >> n;
+
+    vector<int> arr(n);
+    cout << "Enter the elements of the array: ";
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    moveZeroesToEnd(arr, 0, n - 1);
+
+    cout << "Array after moving zeroes to the end: ";
+    for (int i : arr) {
+        cout << i << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
