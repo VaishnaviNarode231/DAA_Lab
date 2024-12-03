@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to check if all tasks can be completed
+// with 'per_day' number of tasks per day
+bool valid(int per_day, vector<int> task, int d) {
+    int cur_day = 0;
+    for (int index = 0; index < task.size(); index++) {
+        int day_req = ceil((double)(task[index]) / (double)(per_day));
+        cur_day += day_req;
+
+        if (cur_day > d) {
+            return false;
+        }
+    }
+    return cur_day <= d;
+}
+
+// Function to find the minimum tasks to be done each day
+int minimumTask(vector<int> task, int d) {
+    int left = 1;
+    int right = *max_element(task.begin(), task.end());
+
+    int per_day_task = 0;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (valid(mid, task, d)) {
+            per_day_task = mid;
+            right = mid - 1;
+        } else {
+            left = mid + 1;
+        }
+    }
+
+    return per_day_task;
+}
+
+// Driver Code
+int main() {
+    // Input the number of tasks and days
+    int n, D;
+    cout << "Enter the number of tasks: ";
+    cin >> n;
+
+    vector<int> task(n);
+    cout << "Enter the tasks: ";
+    for (int i = 0; i < n; i++) {
+        cin >> task[i];
+    }
+
+    cout << "Enter the number of days: ";
+    cin >> D;
+
+    // Output the result
+    cout << "Minimum tasks per day: " << minimumTask(task, D) << endl;
+
+    return 0;
+}
