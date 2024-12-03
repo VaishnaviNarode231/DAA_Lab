@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Function to check if a subset with the given sum exists
+bool isSubsetSum(const vector<int>& set, int sum) {
+    int n = set.size();
+    vector<bool> dp(sum + 1, false);
+
+    // Initialize dp[0] = true as sum 0 is always possible (empty subset)
+    dp[0] = true;
+
+    // Fill the DP table (1D array)
+    for (int i = 0; i < n; i++) {
+        // Traverse in reverse to ensure each element is used only once
+        for (int j = sum; j >= set[i]; j--) {
+            dp[j] = dp[j] || dp[j - set[i]];
+        }
+    }
+
+    // Return the result
+    return dp[sum];
+}
+
+int main() {
+    int n, sum;
+
+    // Take the number of elements in the set from the user
+    cout << "Enter the number of elements in the set: ";
+    cin >> n;
+
+    vector<int> set(n);
+
+    // Take the set elements from the user
+    cout << "Enter the elements of the set: ";
+    for (int i = 0; i < n; i++) {
+        cin >> set[i];
+    }
+
+    // Take the target sum from the user
+    cout << "Enter the target sum: ";
+    cin >> sum;
+
+    // Check if a subset with the given sum exists and print the result
+    cout << (isSubsetSum(set, sum) ? "True" : "False") << endl;
+
+    return 0;
+}
