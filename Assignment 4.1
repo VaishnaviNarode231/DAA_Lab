@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <set>
+using namespace std;
+
+vector<vector<int>> findSubsets(vector<int>& nums) {
+    set<vector<int>> uniqueSubsets; // To store unique subsets
+    int n = nums.size();
+    int totalSubsets = 1 << n; // Total subsets = 2^n
+
+    for (int i = 0; i < totalSubsets; i++) {
+        vector<int> subset;
+        for (int j = 0; j < n; j++) {
+            // Check if the j-th bit in i is set
+            if (i & (1 << j)) {
+                subset.push_back(nums[j]);
+            }
+        }
+        uniqueSubsets.insert(subset); // Add the subset to the set
+    }
+
+    // Convert set to vector of vectors
+    vector<vector<int>> result(uniqueSubsets.begin(), uniqueSubsets.end());
+    return result;
+}
+
+int main() {
+    // Dynamic input from the user
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+
+    vector<int> nums(n);
+    cout << "Enter the elements: ";
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+
+    // Find subsets
+    vector<vector<int>> subsets = findSubsets(nums);
+
+    cout << "Subsets for { ";
+    for (int num : nums) {
+        cout << num << " ";
+    }
+    cout << "}:\n";
+
+    // Print the subsets
+    for (const auto& subset : subsets) {
+        cout << "{ ";
+        for (int num : subset) {
+            cout << num << " ";
+        }
+        cout << "}\n";
+    }
+
+    return 0;
+}
