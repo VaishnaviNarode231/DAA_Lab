@@ -1,42 +1,48 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
 using namespace std;
 
-int maximizeProfit(const vector<int>& arr) {
-    int max_profit = 0;
-    int min_price = arr[0];
+// Function to find the maximum profit
+int maxProfit(const vector<int> &prices) {
+    int n = prices.size();
+    int profit = 0, currentDay = n - 1;
 
-    for (int i = 1; i < arr.size(); i++) {
-        if (arr[i] < min_price) {
-            min_price = arr[i];
-        } else {
-            max_profit = max(max_profit, arr[i] - min_price);
+    // Start from the last day
+    while (currentDay > 0) {
+        int day = currentDay - 1;
+
+        // Traverse and keep adding the profit until a day with
+        // price of stock higher than currentDay is obtained
+        while (day >= 0 && (prices[currentDay] > prices[day])) {
+            profit += (prices[currentDay] - prices[day]);
+            day--;
         }
+
+        // Set this day as currentDay with maximum cost of stock currently
+        currentDay = day;
     }
 
-    return max_profit;
+    // Return the profit
+    return profit;
 }
 
 int main() {
-    int n;
+    int N;
+
+    // Input the number of days
     cout << "Enter the number of days: ";
-    cin >> n;
+    cin >> N;
 
-    if (n <= 0) {
-        cerr << "The number of days must be positive." << endl;
-        return 1;
+    vector<int> prices(N);
+
+    // Input the prices of the stock for each day
+    cout << "Enter the stock prices: ";
+    for (int i = 0; i < N; i++) {
+        cin >> prices[i];
     }
 
-    vector<int> arr(n);
-    cout << "Enter the prices: ";
-    for (int i = 0; i < n; i++) {
-        cin >> arr[i];
-    }
-
-    int result = maximizeProfit(arr);
-    cout << "Maximum Profit: " << result << endl;
+    // Function Call
+    cout << "Maximum profit: " << maxProfit(prices) << endl;
 
     return 0;
 }
